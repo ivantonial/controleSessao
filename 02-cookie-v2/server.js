@@ -1,7 +1,8 @@
 const express = require('express');
-const {randomBytes} = require('crypto');
+const { randomBytes } = require('crypto');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { addAbortSignal } = require('stream');
 const app = express();
 const port = 8080;
 const users = [];
@@ -9,7 +10,7 @@ const users = [];
 // app.use(express.urlencoded({extended: false}));
 // app.use(express.json());
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
@@ -17,7 +18,7 @@ app.use(cookieParser());
 
 app.use('/', express.static('src/'));
 
-app.post('/setCookies', ((req,res) =>{
+app.post('/setCookies', ((req, res) => {
     console.log(req.body)
     const login = req.body[0];
     console.log(req.body[0]);
@@ -25,7 +26,7 @@ app.post('/setCookies', ((req,res) =>{
     // Set-Cookie: key=token.toString('hex');
     // console.log(
     //   `${token.length} bytes of random data: ${token.toString('hex')}`);
-    
+
     login["token"] = token.toString('hex');
     console.log(login);
     users.push(login);
@@ -34,44 +35,41 @@ app.post('/setCookies', ((req,res) =>{
     res.send(token.toString('hex'));
 }))
 
-app.get('/getCookies', ((req,res) =>{
+app.get('/getCookies', ((req, res) => {
     const compareCookies = req.cookies.userAccess;
     console.log(compareCookies);
     let found = 'Not Found!';
     users.forEach(elem => {
         console.log("compareCookies: " + compareCookies);
         console.log("elemtoken: " + elem.token);
-        if (elem.token == compareCookies){
+        if (elem.token == compareCookies) {
             found = elem.login;
         }
     })
     res.send(found);
 }))
 
-app.post('/loginToken', ((req,res) =>{
-    console.log(req.body);
-    const login = req.body[0];
-    console.log(req.body[0]);
-    const token = randomBytes(512);
-    // console.log(
-    //   `${token.length} bytes of random data: ${token.toString('hex')}`);
-    
-    login["token"] = token.toString('hex');
-    console.log(login);
-    users.push(login);
-    res.send(token.toString('hex'));
+app.get('/checkCookies', ((req, res) => {
+    const compareCookies = req.cookies.userAccess;
+    if (req.cookies.userAccess) {
+        console.log(compareCookies);
+        let found = 'Not Found!';
+        users.forEach(elem => {
+            console.log("compareCookies: " + compareCookies);
+            console.log("elemtoken: " + elem.token);
+            if (elem.token == compareCookies) {
+                found = elem.login;
+            }
+        })
+        res.send(found);
+    }
 }))
 
-app.get('/loggedToken', ((req,res) =>{
-    const compareToken = req.query.token;
-    let found = 'Not Found!';
-    users.forEach(elem => {
-        if (elem.token == compareToken){
-            found = elem.login;
-        }
-    });
-    res.send(found);
+app.get('/redirectLogged', ((req,res)=>{
+    console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeey");
+    res.redirect(200, __dirname + '/src/login');
 }))
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-  
+
