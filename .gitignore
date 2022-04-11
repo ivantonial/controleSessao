@@ -13,3 +13,6 @@
 03-cookie-hash/package-lock.json
 03-cookie-hash/package.json
 03-cookie-hash/node_modules
+04-qr-code/package.json
+04-qr-code/package-lock.json
+04-qr-code/node_modules

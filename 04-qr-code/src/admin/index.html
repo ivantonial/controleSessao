@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ON THE ROAD - Parties</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div><input type="button" value="Sair" id="logoutBtn" /></div>
+        <div class="loginTitle">
+            <div class="title">
+                <h1>ON THE ROAD</h1>
+            </div>
+            <div class="subtitle">
+                <h2>Parties</h2>
+            </div>
+        </div>
+    </header>
+
+    <body>
+        <div class="allImage">
+            <div class="userForm">
+                <div class="registerUser">
+                    <h2>CADASTRO DE USUÁRIOS</h2>
+                    <label for="fullname" class="fullname">NOME COMPLETO</label>
+                    <input type="text" name="fullname" id="fullname" />
+                    <label for="login" class="login">LOGIN</label>
+                    <input type="text" name="login" id="login" />
+                    <label for="pass" class="pass">PASSWORD</label>
+                    <input type="password" name="pass" id="pass" />
+                    <div class="options">
+                        <input type="button" value="Registrar Usuário" id="registerUserBtn" />
+                    </div>
+                    <div class="registerParty">
+                        <h2>CADASTRO DE FESTA</h2>
+                        <label for="partyName" class="partyName">NOME DA FESTA</label>
+                        <input type="text" name="partyName" id="partyName" />
+                        <label for="partyDescription" class="partyDescription">DESCRIÇÃO</label>
+                        <div>
+                            <textarea id="partyDescription" name="partyDescription" rows="5" cols="50"></textarea>
+                        </div>
+                        <div class="partyDateTime">
+                            <div>
+                                <label for="partyDate" class="partyDate">DATA</label>
+                                <input type="date" name="partyDate" id="partyDate" />
+                            </div>
+                            <div>
+                                <label for="partyTime" class="partyTime">HORÁRIO</label>
+                                <input type="time" name="partyTime" id="partyTime" />
+                            </div>
+                        </div>
+                        <div class="options">
+                            <input type="button" value="Registrar Festa" id="registerPartyBtn" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</body>
+
+</html>
