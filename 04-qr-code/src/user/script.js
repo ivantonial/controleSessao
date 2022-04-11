@@ -4,11 +4,14 @@ const exitBtn = document.getElementById('logoutBtn');
 
 exitBtn.addEventListener('click', logout);
 
-
-document.getElementById('userName').innerText = "Bem-vindo, " + localStorage.getItem("userName") + "!";
+const userName = localStorage.getItem("userName");
+document.getElementById('userName').innerText = "Bem-vindo, " + userName + "!";
 
 const userLogin = localStorage.getItem("userLogin");
 
+// async function confirmParty(){
+//     const ticketStatus = await (await fetch(`/confirm?token=${}`))
+// }
 
 async function checkCookie() {
     const cookie = await (await (fetch('/checkCookie'))).text();
@@ -62,7 +65,7 @@ async function partiesToGo() {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify([{"nome": elem.name, "date": elem.date}])
+                body: JSON.stringify([{"name": elem.name, "date": elem.date, "userName": userName.replaceAll(" ", "-")}])
             }))).text();
 
             console.log("qrCode:" + qrCodeImg);

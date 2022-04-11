@@ -1,11 +1,14 @@
 const router = require("express").Router();
 const bcrypt = require('bcrypt');
 const { createHash } = require('crypto');
+const e = require("express");
 const qrCode = require('qrcode-generator');
 
 let users = [{ "name": "Ivan Ramalho Tonial", "login": "ivantonial", "password": "$2b$10$vE69sxRirIDqFqTjSgCEtuNKtGkHW5vVBONfITAmdmv.i1OsNTXBa", "parties": [{ "name": "haha", "description": "haha", "date": "2022-02-21", "time": "10:00" }] }];
 let admin = [{ "name": "Ivan Ramalho Tonial", "login": "admin", "password": "$2b$10$1nYhLmUP3Ys.sL52LcswYu7g11OYmObwYIerQG.T7WQgeUfQydqMW" }];
 let parties = [{ "name": "haha", "description": "haha", "date": "2022-02-21", "time": "10:00" }, { "name": "hehe", "description": "haha", "date": "2022-02-21", "time": "10:00" }];
+let tickets = [];
+
 
 router.post("/loginPage", (req, res) => {
     console.log(req.body);
@@ -197,13 +200,23 @@ router.post("/partyThis", (req, res) => {
 
 router.post("/qrCodeGenerator", (req, res) => {
     const info = req.body[0];
-    console.log(info);
-    const nameInfo = info.name;
-    const dateInfo = info.date;
-    const teste = info.name + info.date;
+    console.log("Info: "+info);
+    const stringToken = info.name + info.date + info.userName;
+    let testToken = true;
     console.log("INFOOOOOOOOOOO:" + Object.values(info));
-    const token = createHash('sha256').update(teste).digest('hex');
+    const token = createHash('sha256').update(stringToken).digest('hex');
     console.log("TOKEN: " + token);
+    info["token"] = token;
+    info["used"] = 0;
+    tickets.forEach((elem) => {
+        if (elem.token === info.token){
+            testToken = false;
+        }
+    })
+    if (testToken){
+        tickets.push(info);
+    }
+    console.log(tickets);
         const qr = qrCode(10, 'L');
         qr.addData('http://localhost:8080/confirm?token='+token);
         qr.make();
@@ -234,6 +247,33 @@ router.get('/checkCookie', ((req, res) => {
         console.log('huhu');
         return res.send('needLogin');
     }
+}))
+
+router.get('/confirm', ((req, res) => {
+    const token = req.query.token;
+    let tokenFound = false;
+    let tokenUsed = false;
+    let tokenInfo;
+    tickets.forEach(elem => {
+        if (token === elem.token){
+            tokenFound = true;
+            if(elem.used === 0) {
+                elem.used++;
+                tokenInfo = elem;
+            } else {
+                tokenUsed = true;
+            }
+        }
+    })
+
+    if (tokenFound && tokenUsed) {
+        res.send("Ingresso Já Utilizado");
+    } else if(tokenFound) {
+        res.json(tokenInfo);
+    } else {
+        res.send("qrCode Inválido!")
+    }
+
 }))
 
 module.exports = router;
