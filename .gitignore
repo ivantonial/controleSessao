@@ -16,3 +16,6 @@
 04-qr-code/package.json
 04-qr-code/package-lock.json
 04-qr-code/node_modules
+05-jwt/package.json
+05-jwt/package-lock.json
+05-jwt/node_modules
